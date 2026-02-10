@@ -1,0 +1,15 @@
+<h2>Your Cart</h2>
+
+{% for item in cart.items %}
+  <p>
+    {{ item.product.name }} |
+    {{ item.quantity }} |
+    ₹{{ item.total }}
+
+    <a href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
+  </p>
+{% endfor %}
+
+<h3>Total: ₹{{ cart.get_total_price }}</h3>
+
+<a href="{% url 'checkout' %}">Checkout</a>
