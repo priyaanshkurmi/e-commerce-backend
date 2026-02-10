@@ -16,7 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.http import HttpResponse   # add this
+
+def home(request):
+    return HttpResponse("Ecommerce Backend Running 🚀")
 
 urlpatterns = [
+    path('', home),   # <-- add this line
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)
