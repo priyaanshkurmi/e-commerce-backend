@@ -37,5 +37,8 @@ urlpatterns += static(
 
 
 urlpatterns += [
+    path("", include("products.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("orders/", include("orders.urls")),
+    path("payments/", include("payments.urls")),
 ]

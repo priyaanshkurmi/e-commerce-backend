@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from products.models import Product
 from .cart import Cart
 from .models import Order, OrderItem
+from django.shortcuts import redirect
 
 
 def add_to_cart(request, product_id):
@@ -54,9 +55,7 @@ def checkout(request):
 
         cart.clear()
 
-        return render(request, "orders/success.html", {
-            "order": order
-        })
+        return redirect("start_payment", order_id=order.id)
 
     return render(request, "orders/checkout.html", {
         "cart": cart
