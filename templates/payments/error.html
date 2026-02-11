@@ -1,0 +1,27 @@
+<h1>✗ Payment Failed</h1>
+
+<div style="border: 1px solid #e74c3c; padding: 20px; border-radius: 5px; background-color: #fadbd8; margin: 20px 0;">
+  <h2 style="color: #c0392b; margin-top: 0;">Payment Could Not Be Processed</h2>
+  <p>{{ message }}</p>
+</div>
+
+{% if order_id %}
+<div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px; background-color: #f9f9f9; margin: 20px 0;">
+  <h3>Order Details</h3>
+  <p><strong>Razorpay Order ID:</strong> {{ order_id }}</p>
+  <p>Please save this order ID for reference when contacting support.</p>
+</div>
+{% endif %}
+
+<h3>What Can You Do?</h3>
+<ul>
+  <li><strong>Retry Payment:</strong> <a href="/orders/checkout/">Go back to checkout</a> and try again.</li>
+  <li><strong>Contact Support:</strong> If the problem persists, please contact our support team.</li>
+  <li><strong>Continue Shopping:</strong> <a href="/">Return to home page</a></li>
+</ul>
+
+<div style="border: 1px solid #f39c12; padding: 15px; border-radius: 5px; background-color: #fef5e7; margin: 20px 0;">
+  <p style="margin: 0;">
+    <strong>⚠️ Note:</strong> Your order has been created but payment was not received. Please retry the payment to complete your purchase.
+  </p>
+</div>

@@ -18,14 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import HttpResponse   # add this
 from django.urls import include
 
-def home(request):
-    return HttpResponse("Ecommerce Backend Running 🚀")
-
 urlpatterns = [
-    path('', home),   # <-- add this line
     path('admin/', admin.site.urls),
 ]
 
@@ -38,6 +33,7 @@ urlpatterns += static(
 
 urlpatterns += [
     path("", include("products.urls")),
+    path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("orders/", include("orders.urls")),
     path("payments/", include("payments.urls")),

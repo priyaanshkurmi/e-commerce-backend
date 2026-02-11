@@ -1,8 +1,25 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-<h2>Pay ₹{{ order.total_price }}</h2>
+<h1>Complete Your Payment</h1>
 
-<button id="pay-btn">Pay Now</button>
+<div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px; max-width: 500px; margin: 20px 0; background-color: #f9f9f9;">
+  <h2 style="margin-top: 0;">Order Summary</h2>
+  <p><strong>Order ID:</strong> #{{ order.id }}</p>
+  <p><strong>Total Amount:</strong> <span style="font-size: 24px; color: #2c3e50;">₹{{ order.total_price }}</span></p>
+  <p style="color: #7f8c8d; font-size: 14px;">Items: {{ order.items.count }}</p>
+</div>
+
+<button id="pay-btn" style="padding: 12px 30px; background-color: #3498db; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold;">
+  Pay ₹{{ order.total_price }}
+</button>
+
+<p style="margin-top: 20px; color: #7f8c8d; font-size: 14px;">
+  You will be redirected to Razorpay's secure payment gateway.
+</p>
+
+<a href="/orders/checkout/" style="margin-top: 20px; display: inline-block; color: #3498db; text-decoration: none;">
+  ← Back to Checkout
+</a>
 
 <script>
 var options = {
@@ -11,6 +28,10 @@ var options = {
   "currency": "INR",
   "order_id": "{{ razorpay_order_id }}",
   "callback_url": "{% url 'payment_success' %}",
+  "prefill": {
+    "name": "{{ request.user.get_full_name|default:request.user.username }}",
+    "email": "{{ request.user.email }}"
+  }
 };
 
 var rzp = new Razorpay(options);

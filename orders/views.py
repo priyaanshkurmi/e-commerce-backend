@@ -9,7 +9,8 @@ from django.shortcuts import redirect
 
 def add_to_cart(request, product_id):
     cart = Cart(request)
-    cart.add(product_id)
+    quantity = int(request.POST.get('quantity', 1)) if request.method == 'POST' else 1
+    cart.add(product_id, quantity)
 
     return redirect("cart_detail")
 
