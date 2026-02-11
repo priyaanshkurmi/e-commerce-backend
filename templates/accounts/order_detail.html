@@ -1,0 +1,85 @@
+<h1>Order Details</h1>
+
+<a href="{% url 'order_history' %}" style="padding: 8px 15px; background-color: #95a5a6; color: white; text-decoration: none; border-radius: 4px; display: inline-block; margin-bottom: 20px;">
+  ← Back to Orders
+</a>
+
+<hr>
+
+<div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px; background-color: #f9f9f9; margin: 20px 0;">
+  <h2 style="margin-top: 0;">Order #{{ order.id }}</h2>
+  
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+    <div>
+      <p><strong>Order Date:</strong> {{ order.created_at|date:"M d, Y H:i" }}</p>
+      <p><strong>Total Amount:</strong> <span style="font-size: 20px; color: #2c3e50;">₹{{ order.total_price }}</span></p>
+    </div>
+    
+    <div>
+      <p>
+        <strong>Order Status:</strong>
+        {% if order.status == "paid" %}
+          <span style="background-color: #d5f4e6; color: #27ae60; padding: 5px 10px; border-radius: 3px; font-weight: bold;">{{ order.get_status_display }}</span>
+        {% elif order.status == "pending" %}
+          <span style="background-color: #fef5e7; color: #f39c12; padding: 5px 10px; border-radius: 3px; font-weight: bold;">{{ order.get_status_display }}</span>
+        {% elif order.status == "shipped" %}
+          <span style="background-color: #d6eaf8; color: #2980b9; padding: 5px 10px; border-radius: 3px; font-weight: bold;">{{ order.get_status_display }}</span>
+        {% elif order.status == "delivered" %}
+          <span style="background-color: #d5f4e6; color: #27ae60; padding: 5px 10px; border-radius: 3px; font-weight: bold;">✓ {{ order.get_status_display }}</span>
+        {% else %}
+          <span style="background-color: #fadbd8; color: #c0392b; padding: 5px 10px; border-radius: 3px; font-weight: bold;">{{ order.get_status_display }}</span>
+        {% endif %}
+      </p>
+      
+      {% if order.status == "pending" %}
+        <p style="color: #f39c12; font-size: 14px;">
+          ⚠️ Payment is still pending. Complete the payment to proceed.
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<h3>Order Items</h3>
+
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+  <tr style="border-bottom: 2px solid #ddd; background-color: #f9f9f9;">
+    <th style="text-align: left; padding: 12px;">Product</th>
+    <th style="text-align: center; padding: 12px;">Quantity</th>
+    <th style="text-align: right; padding: 12px;">Price</th>
+    <th style="text-align: right; padding: 12px;">Total</th>
+  </tr>
+
+  {% for item in order.items.all %}
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        {% if item.product.image %}
+          <img src="{{ item.product.image.url }}" width="50" height="50" style="border-radius: 4px; object-fit: cover;">
+        {% endif %}
+        <div>
+          <strong>{{ item.product.name }}</strong>
+          <p style="margin: 0; font-size: 12px; color: #7f8c8d;">Category: {{ item.product.category.name }}</p>
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center; padding: 12px;">{{ item.quantity }}</td>
+    <td style="text-align: right; padding: 12px;">₹{{ item.price }}</td>
+    <td style="text-align: right; padding: 12px; font-weight: bold;">₹{{ item.total_price }}</td>
+  </tr>
+  {% endfor %}
+
+  <tr style="border-top: 2px solid #ddd; background-color: #f9f9f9;">
+    <td colspan="3" style="text-align: right; padding: 12px; font-weight: bold;">Order Total:</td>
+    <td style="text-align: right; padding: 12px; font-weight: bold; font-size: 18px;">₹{{ order.total_price }}</td>
+  </tr>
+</table>
+
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+  <a href="{% url 'order_history' %}" style="padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 4px;">
+    Back to Orders
+  </a>
+  <a href="/" style="padding: 10px 20px; background-color: #2ecc71; color: white; text-decoration: none; border-radius: 4px;">
+    Continue Shopping
+  </a>
+</div>

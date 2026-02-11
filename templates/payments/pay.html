@@ -27,7 +27,7 @@ var options = {
   "amount": "{{ amount }}",
   "currency": "INR",
   "order_id": "{{ razorpay_order_id }}",
-  "callback_url": "{% url 'payment_success' %}",
+  callback_url: "http://127.0.0.1:8000/payments/verify/",
   "prefill": {
     "name": "{{ request.user.get_full_name|default:request.user.username }}",
     "email": "{{ request.user.email }}"

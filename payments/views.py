@@ -8,6 +8,9 @@ from .models import Payment
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 import logging
+import json
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
 
@@ -49,51 +52,39 @@ def start_payment(request, order_id):
 
 
 
+@login_required
+def payment_success(request):
+    return render(request, "payments/success.html")
+
+
 
 @csrf_exempt
-def payment_success(request):
+def verify_payment(request):
 
-    data = request.POST
+    if request.method == "POST":
 
-    try:
-        # Verify the payment signature
-        client.utility.verify_payment_signature(data)
-    except razorpay.BadRequestError as e:
-        logger.error(f"Payment signature verification failed: {str(e)}")
-        return render(request, "payments/error.html", {
-            "message": "Payment verification failed. Please contact support.",
-            "order_id": data.get("razorpay_order_id")
-        })
-    except Exception as e:
-        logger.error(f"Unexpected error during payment verification: {str(e)}")
-        return render(request, "payments/error.html", {
-            "message": "An unexpected error occurred. Please contact support."
-        })
+        if request.POST:
 
-    try:
-        payment = Payment.objects.get(
-            razorpay_order_id=data["razorpay_order_id"]
+            data = {
+                "razorpay_order_id": request.POST.get("razorpay_order_id"),
+                "razorpay_payment_id": request.POST.get("razorpay_payment_id"),
+                "razorpay_signature": request.POST.get("razorpay_signature"),
+            }
+
+        else:
+            import json
+            data = json.loads(request.body.decode("utf-8"))
+
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
         )
-    except Payment.DoesNotExist:
-        logger.error(f"Payment record not found for order: {data.get('razorpay_order_id')}")
-        return render(request, "payments/error.html", {
-            "message": "Payment record not found. Please contact support."
-        })
 
-    # Update payment details
-    payment.razorpay_payment_id = data.get("razorpay_payment_id", "")
-    payment.razorpay_signature = data.get("razorpay_signature", "")
-    payment.status = "paid"
-    payment.save()
+        try:
+            client.utility.verify_payment_signature(data)
 
-    # Update order
-    order = payment.order
-    order.status = "paid"
-    order.save()
+            return redirect("payment_success")
 
-    logger.info(f"Payment successful for order {order.id}")
+        except:
 
-    return render(request, "payments/success.html", {
-        "order": order,
-        "payment": payment
-    })
+            return redirect("product_list")
+        

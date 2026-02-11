@@ -1,5 +1,10 @@
 <h1>Shop</h1>
 
+<a href="{% url 'dashboard' %}" 
+   style="position: fixed; top: 20px; right: 20px; padding: 8px 15px; background-color: #95a5a6; color: white; text-decoration: none; border-radius: 4px;">
+  ← GO to Dashboard
+</a>
+
 {% if user.is_authenticated %}
   <p>Welcome, {{ user.username }}</p>
   <a href="/accounts/logout/">Logout</a>
