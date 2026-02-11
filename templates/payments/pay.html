@@ -27,10 +27,18 @@ var options = {
   "amount": "{{ amount }}",
   "currency": "INR",
   "order_id": "{{ razorpay_order_id }}",
-  callback_url: "http://127.0.0.1:8000/payments/verify/",
+  "handler": function(response) {
+    // Fill hidden form fields and submit
+    document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+    document.getElementById('razorpay_signature').value = response.razorpay_signature;
+    document.getElementById('paymentForm').submit();
+  },
   "prefill": {
     "name": "{{ request.user.get_full_name|default:request.user.username }}",
     "email": "{{ request.user.email }}"
+  },
+  "theme": {
+    "color": "#3498db"
   }
 };
 
@@ -41,3 +49,11 @@ document.getElementById("pay-btn").onclick = function(e){
   e.preventDefault();
 }
 </script>
+
+<!-- Hidden form to submit payment data -->
+<form id="paymentForm" method="POST" action="{% url 'verify_payment' %}" style="display: none;">
+  {% csrf_token %}
+  <input type="hidden" id="razorpay_order_id" name="razorpay_order_id" value="{{ razorpay_order_id }}">
+  <input type="hidden" id="razorpay_payment_id" name="razorpay_payment_id">
+  <input type="hidden" id="razorpay_signature" name="razorpay_signature">
+</form>
