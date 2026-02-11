@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from orders.models import Order
 from .models import Payment
+from .email import send_payment_confirmation_email, send_order_confirmation_email
 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
@@ -136,6 +137,11 @@ def verify_payment(request):
                 status="paid",
                 paid_at=timezone.now()
             )
+
+        # Send confirmation emails
+        send_payment_confirmation_email(payment)
+        send_order_confirmation_email(order)
+        logger.info(f"Confirmation emails sent for order {order.id}")
 
         return redirect("payment_success")
 

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #27ae60;
+        }
+        .header h1 {
+            color: #27ae60;
+            margin: 0;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .payment-summary {
+            background-color: #d5f4e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #27ae60;
+        }
+        .payment-details {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .action-button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        .success-badge {
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✓ Payment Confirmed!</h1>
+            <p style="margin: 10px 0 0 0; color: #27ae60; font-weight: bold;">Your payment has been successfully processed.</p>
+        </div>
+
+        <div class="content">
+            <p>Hi {{ customer_name }},</p>
+            
+            <p>We're pleased to confirm that your payment has been successfully processed.</p>
+
+            <div class="payment-summary">
+                <h2 style="margin-top: 0; color: #27ae60;">Payment Summary</h2>
+                <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                <p><strong>Amount Paid:</strong> <span style="font-size: 20px; color: #27ae60;">₹{{ paid_amount }}</span></p>
+                <p><strong>Payment ID:</strong> {{ payment_id }}</p>
+                <p><strong>Payment Date:</strong> {{ payment_date }}</p>
+            </div>
+
+            <div class="payment-details">
+                <h3 style="margin-top: 0; color: #2c3e50;">What happens next?</h3>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Your order is being prepared for shipment</li>
+                    <li>You'll receive a shipping notification within 24 hours</li>
+                    <li>Track your order in real-time from your dashboard</li>
+                    <li>Expected delivery: 5-7 business days</li>
+                </ul>
+            </div>
+
+            <p style="text-align: center;">
+                <a href="https://ecommerce.com/accounts/dashboard/" class="action-button">
+                    View Your Order
+                </a>
+                &nbsp;&nbsp;
+                <a href="https://ecommerce.com/orders/invoice/{{ order.id }}/" class="action-button" style="background-color: #95a5a6;">
+                    Download Invoice
+                </a>
+            </p>
+
+            <h3 style="color: #2c3e50;">Need Help?</h3>
+            <p>If you have any questions about your order or payment, please reach out to our support team at <strong>support@ecommerce.com</strong></p>
+
+            <p>Thank you for shopping with us!</p>
+
+            <p>Best regards,<br>
+            <strong>E-Commerce Store Team</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 E-Commerce Store. All rights reserved.</p>
+            <p>This is an automated message. Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

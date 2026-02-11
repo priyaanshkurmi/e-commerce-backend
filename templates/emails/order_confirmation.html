@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .order-summary {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .order-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .action-button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        .success-badge {
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✓ Order Confirmation</h1>
+            <p style="margin: 10px 0 0 0; color: #7f8c8d;">Thank you for your purchase!</p>
+        </div>
+
+        <div class="content">
+            <p>Hi {{ customer_name }},</p>
+            
+            <p>Your order has been successfully placed and confirmed. We're excited to process your order!</p>
+
+            <div class="order-summary">
+                <h2 style="margin-top: 0; color: #2c3e50;">Order Details</h2>
+                <p><strong>Order ID:</strong> #{{ order_id }}</p>
+                <p><strong>Order Date:</strong> {{ order_date }}</p>
+                <p><strong>Total Amount:</strong> <span style="font-size: 18px; color: #27ae60;">₹{{ order_total }}</span></p>
+                <p><strong>Items Ordered:</strong> {{ items_count }}</p>
+            </div>
+
+            <p>Your order will be shipped within 1-2 business days. You'll receive tracking information via email once your order is dispatched.</p>
+
+            <p style="text-align: center;">
+                <a href="https://ecommerce.com/accounts/orders/{{ order.id }}/" class="action-button">
+                    View Order Details
+                </a>
+            </p>
+
+            <h3 style="color: #2c3e50; margin-top: 30px;">What's Next?</h3>
+            <ul>
+                <li>We'll process your order immediately</li>
+                <li>You'll receive a shipping notification with tracking details</li>
+                <li>Track your order anytime in your account dashboard</li>
+            </ul>
+
+            <p>If you have any questions, please don't hesitate to contact our support team.</p>
+
+            <p>Best regards,<br>
+            <strong>E-Commerce Store Team</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>© {{ year }} E-Commerce Store. All rights reserved.</p>
+            <p>You received this email because you placed an order on our website.</p>
+        </div>
+    </div>
+</body>
+</html>

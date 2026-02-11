@@ -48,15 +48,31 @@
 </div>
 
 <div style="max-width: 600px; margin-top: 30px; border: 1px solid #ddd; padding: 20px; border-radius: 5px; background-color: #f9f9f9;">
-  <h3>Account Summary</h3>
-  <p><strong>Member Since:</strong> {{ user.date_joined|date:"M d, Y" }}</p>
-  <p><strong>Last Login:</strong> 
-    {% if user.last_login %}
-      {{ user.last_login|date:"M d, Y H:i" }}
-    {% else %}
-      Never
-    {% endif %}
-  </p>
+  <h3 style="margin-top: 0;">Shipping Address</h3>
+  
+  {% if address %}
+    <div style="background-color: #f0f8ff; border: 1px solid #3498db; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+      <p style="margin: 0 0 10px 0;"><strong>📍 Current Address</strong></p>
+      <p style="margin: 5px 0;"><strong>{{ address.full_name }}</strong></p>
+      <p style="margin: 5px 0;">{{ address.address_line_1 }}{% if address.address_line_2 %}, {{ address.address_line_2 }}{% endif %}</p>
+      <p style="margin: 5px 0;">{{ address.city }}, {{ address.state }} - {{ address.postal_code }}</p>
+      <p style="margin: 5px 0;">{{ address.country }}</p>
+      <p style="margin: 10px 0 0 0; color: #7f8c8d; font-size: 12px;">Phone: {{ address.phone }}</p>
+      <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 12px;">Updated: {{ address.updated_at|date:"M d, Y" }}</p>
+    </div>
+
+    <a href="{% url 'manage_address' %}" style="padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 4px; display: inline-block;">
+      ✎ Edit Address
+    </a>
+  {% else %}
+    <div style="background-color: #fff9e6; border: 1px solid #f39c12; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+      <p style="margin: 0; color: #d68910;"><strong>⚠️ No address on file.</strong> Add one for faster checkout.</p>
+    </div>
+
+    <a href="{% url 'manage_address' %}" style="padding: 10px 20px; background-color: #2ecc71; color: white; text-decoration: none; border-radius: 4px; display: inline-block;">
+      + Add Address
+    </a>
+  {% endif %}
 </div>
 
 <div style="max-width: 600px; margin-top: 30px;">

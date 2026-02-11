@@ -38,6 +38,14 @@
       {% endif %}
     </div>
   </div>
+
+  {% if order.is_paid %}
+  <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
+    <a href="{% url 'download_invoice' order.id %}" style="padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 4px; display: inline-block;">
+      📄 Download Invoice (PDF)
+    </a>
+  </div>
+  {% endif %}
 </div>
 
 <h3>Order Items</h3>

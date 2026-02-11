@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from products.models import Product
 from .cart import Cart
 from .models import Order, OrderItem
-from django.shortcuts import redirect
+from .invoice import generate_invoice_pdf
 
 
 def add_to_cart(request, product_id):
@@ -61,3 +61,10 @@ def checkout(request):
     return render(request, "orders/checkout.html", {
         "cart": cart
     })
+
+
+@login_required
+def download_invoice(request, order_id):
+    """Download order invoice as PDF"""
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return generate_invoice_pdf(order)
