@@ -65,7 +65,7 @@ Backend + Frontend template-based e-commerce application built with Django.
 
 # 1️⃣ Clone the Repository
 
-* git clone https://github.com/yourusername/ecommerce.git
+* git clone https://github.com/priyaanshkurmi/ecommerce.git
   cd ecommerce
 
 # 2️⃣ Create Virtual Environment
