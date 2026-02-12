@@ -132,8 +132,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/accounts/login/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Email Configuration
 EMAIL_BACKEND = os.getenv(

@@ -1,15 +1,77 @@
-<h2>Your Cart</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f5f5f5; color:#333; }
+    .container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
+    .cart-card { background:white; padding:20px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
+    .cart-item { display:flex; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid #eee; }
+    .cart-item:last-child{ border-bottom:none }
+    .item-image { width:70px; height:70px; object-fit:cover; border-radius:4px; }
+    .item-info { flex:1 }
+    .item-name { font-weight:600; color:#2c3e50 }
+    .item-meta { color:#7f8c8d; font-size:13px }
+    .item-actions { text-align:right; min-width:140px }
+    .btn { padding:8px 12px; border-radius:4px; border:none; cursor:pointer }
+    .btn-remove { background:#e74c3c; color:white }
+    .btn-continue { background:#3498db; color:white; text-decoration:none; display:inline-block; padding:10px 18px; border-radius:4px }
+    .summary { margin-top:20px; padding:15px; background:#fafafa; border-radius:6px }
+    .summary .row { display:flex; justify-content:space-between; padding:6px 0 }
+    .checkout-btn { width:100%; padding:14px; background:#27ae60; color:white; border:none; border-radius:6px; font-weight:700; cursor:pointer }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Cart</h1>
+    {% if cart.items %}
+      <div class="cart-card">
+        {% for item in cart.items %}
+          <div class="cart-item">
+            {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" class="item-image" alt="{{ item.product.name }}">
+            {% else %}
+              <div class="item-image" style="background:#eee; display:flex;align-items:center;justify-content:center;">—</div>
+            {% endif %}
 
-{% for item in cart.items %}
-  <p>
-    {{ item.product.name }} |
-    {{ item.quantity }} |
-    ₹{{ item.total }}
+            <div class="item-info">
+              <div class="item-name">{{ item.product.name }}</div>
+              <div class="item-meta">Qty: {{ item.quantity }} &nbsp; • &nbsp; ₹{{ item.price }} each</div>
+            </div>
 
-    <a href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
-  </p>
-{% endfor %}
+            <div class="item-actions">
+              <div style="margin-bottom:8px; font-weight:700">₹{{ item.total }}</div>
+              <div>
+                <a href="{% url 'product_detail' item.product.id %}" style="margin-right:8px;" class="btn">Details</a>
+                <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-remove">Remove</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
 
-<h3>Total: ₹{{ cart.get_total_price }}</h3>
+        <div class="summary">
+          <div class="row"><span>Subtotal</span><span>₹{{ cart.get_total_price }}</span></div>
+          <div class="row"><span>Tax (0%)</span><span>₹0.00</span></div>
+          <div class="row"><span>Shipping</span><span>FREE</span></div>
+          <hr style="border:none;border-top:1px solid #eee;margin:10px 0">
+          <div class="row" style="font-size:18px;font-weight:700"><span>Total</span><span>₹{{ cart.get_total_price }}</span></div>
 
-<a href="{% url 'checkout' %}">Checkout</a>
+          <div style="margin-top:16px; display:flex; gap:12px;">
+            <a href="{% url 'product_list' %}" class="btn-continue">Continue Shopping</a>
+            <form method="get" action="{% url 'checkout' %}" style="margin:0">
+              <button type="submit" class="checkout-btn">Proceed to Checkout</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="cart-card" style="text-align:center; padding:60px 20px">
+        <p style="color:#7f8c8d; margin-bottom:18px">Your cart is empty</p>
+        <a href="{% url 'product_list' %}" class="btn-continue">Start Shopping</a>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

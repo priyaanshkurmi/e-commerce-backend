@@ -1,25 +1,61 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-<h1>Complete Your Payment</h1>
+<div class="container">
+  <div class="back-link">
+    <a href="/orders/checkout/">← Back to Checkout</a>
+  </div>
 
-<div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px; max-width: 500px; margin: 20px 0; background-color: #f9f9f9;">
-  <h2 style="margin-top: 0;">Order Summary</h2>
-  <p><strong>Order ID:</strong> #{{ order.id }}</p>
-  <p><strong>Total Amount:</strong> <span style="font-size: 24px; color: #2c3e50;">₹{{ order.total_price }}</span></p>
-  <p style="color: #7f8c8d; font-size: 14px;">Items: {{ order.items.count }}</p>
+  <h1>Complete Your Payment</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div class="checkout-grid">
+    <!-- Order Summary Section -->
+    <div class="checkout-section">
+      <h2>Order Summary</h2>
+
+      <div class="order-summary">
+        <div class="price-row">
+          <span class="label">Order ID:</span>
+          <span class="amount">#{{ order.id }}</span>
+        </div>
+        <div class="price-row">
+          <span class="label">Items:</span>
+          <span class="amount">{{ order.items.count }}</span>
+        </div>
+        <div class="price-row total">
+          <span>Total:</span>
+          <span>₹{{ order.total_price }}</span>
+        </div>
+      </div>
+
+      <button 
+        id="pay-btn" 
+        class="place-order-btn"
+      >
+        Pay ₹{{ order.total_price }}
+      </button>
+
+      <div style="margin-top: 15px; padding: 10px; background-color: #ecf0f1; border-radius: 4px; font-size: 12px; color: #7f8c8d;">
+        💳 You will be redirected to Razorpay's secure payment gateway.
+      </div>
+    </div>
+  </div>
 </div>
 
-<button id="pay-btn" style="padding: 12px 30px; background-color: #3498db; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold;">
-  Pay ₹{{ order.total_price }}
-</button>
-
-<p style="margin-top: 20px; color: #7f8c8d; font-size: 14px;">
-  You will be redirected to Razorpay's secure payment gateway.
-</p>
-
-<a href="/orders/checkout/" style="margin-top: 20px; display: inline-block; color: #3498db; text-decoration: none;">
-  ← Back to Checkout
-</a>
+<!-- Hidden form to submit payment data -->
+<form id="paymentForm" method="POST" action="{% url 'verify_payment' %}" style="display: none;">
+  {% csrf_token %}
+  <input type="hidden" id="razorpay_order_id" name="razorpay_order_id" value="{{ razorpay_order_id }}">
+  <input type="hidden" id="razorpay_payment_id" name="razorpay_payment_id">
+  <input type="hidden" id="razorpay_signature" name="razorpay_signature">
+</form>
 
 <script>
 var options = {
@@ -28,7 +64,6 @@ var options = {
   "currency": "INR",
   "order_id": "{{ razorpay_order_id }}",
   "handler": function(response) {
-    // Fill hidden form fields and submit
     document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
     document.getElementById('razorpay_signature').value = response.razorpay_signature;
     document.getElementById('paymentForm').submit();
@@ -50,10 +85,97 @@ document.getElementById("pay-btn").onclick = function(e){
 }
 </script>
 
-<!-- Hidden form to submit payment data -->
-<form id="paymentForm" method="POST" action="{% url 'verify_payment' %}" style="display: none;">
-  {% csrf_token %}
-  <input type="hidden" id="razorpay_order_id" name="razorpay_order_id" value="{{ razorpay_order_id }}">
-  <input type="hidden" id="razorpay_payment_id" name="razorpay_payment_id">
-  <input type="hidden" id="razorpay_signature" name="razorpay_signature">
-</form>
+<style>
+/* Reusing previous checkout styles for consistency */
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+.back-link a {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 14px;
+}
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.checkout-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.checkout-section h2 {
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #ecf0f1;
+  font-size: 18px;
+}
+
+.order-summary {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.price-row.total {
+  border-top: 2px solid #ecf0f1;
+  padding-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.price-row .label {
+  color: #7f8c8d;
+}
+
+.price-row .amount {
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.place-order-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.place-order-btn:hover {
+  background-color: #229954;
+}
+</style>

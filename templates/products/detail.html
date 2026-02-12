@@ -1,18 +1,20 @@
 <h1>{{ product.name }}</h1>
 
-<a href="{% url 'product_list' %}">← Back to Products</a>
+<div class="back-link">
+  <a href="{% url 'product_list' %}">← Back to Products</a>
+</div>
 
 <hr>
 
-<div style="display: flex; gap: 30px; margin: 20px 0;">
+<div style="display: flex; gap: 30px; margin: 20px 0; flex-wrap: wrap;">
   <!-- Product Image -->
-  <div>
-    <img src="{{ product.image.url }}" width="300" style="border: 1px solid #ccc; padding: 10px;">
+  <div style="flex: 1; min-width: 280px; background-color: white; padding: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center;">
+    <img src="{{ product.image.url }}" width="40%" style="border-radius: 5px; border: 1px solid #ecf0f1; padding: 5px;">
   </div>
 
   <!-- Product Details -->
-  <div>
-    <h2>₹{{ product.price }}</h2>
+  <div style="flex: 1; min-width: 280px; background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <h2 style="margin-top: 0; color: #2c3e50;">₹{{ product.price }}</h2>
 
     <p>
       <strong>Category:</strong> {{ product.category.name }}
@@ -21,9 +23,9 @@
     <p>
       <strong>Stock:</strong>
       {% if product.stock > 0 %}
-        <span style="color: green;">In Stock ({{ product.stock }} available)</span>
+        <span style="color: #27ae60;">In Stock ({{ product.stock }} available)</span>
       {% else %}
-        <span style="color: red;">Out of Stock</span>
+        <span style="color: #e74c3c;">Out of Stock</span>
       {% endif %}
     </p>
 
@@ -36,13 +38,11 @@
 
     <!-- Add to Cart Form -->
     {% if product.stock > 0 %}
-      <div style="margin-top: 20px; border: 1px solid #ddd; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
-        <form method="POST" action="{% url 'add_to_cart' product.id %}" style="display: flex; gap: 10px; align-items: center;">
+      <div style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #ecf0f1;">
+        <form method="POST" action="{% url 'add_to_cart' product.id %}" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
           {% csrf_token %}
 
-          <label for="quantity">
-            <strong>Quantity:</strong>
-          </label>
+          <label for="quantity"><strong>Quantity:</strong></label>
           <input
             type="number"
             id="quantity"
@@ -53,17 +53,17 @@
             style="width: 60px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
           >
 
-          <button type="submit" style="padding: 10px 25px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+          <button type="submit" style="padding: 12px 25px; background-color: #27ae60; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;">
             Add to Cart
           </button>
         </form>
 
-        <p style="margin-top: 10px; font-size: 12px; color: #666;">
+        <p style="margin-top: 10px; font-size: 12px; color: #7f8c8d;">
           Select quantity and click "Add to Cart" to proceed.
         </p>
       </div>
     {% else %}
-      <div style="margin-top: 20px; padding: 15px; background-color: #ffebee; border: 1px solid #ef5350; border-radius: 5px; color: #c62828;">
+      <div style="margin-top: 20px; padding: 15px; background-color: #fadbd8; border: 2px solid #e74c3c; color: #c0392b; border-radius: 5px;">
         <strong>⚠️ This product is currently out of stock.</strong>
       </div>
     {% endif %}
@@ -72,6 +72,7 @@
 
 <hr style="margin-top: 40px;">
 
-<p style="text-align: center; color: #666;">
-  <a href="/orders/cart/">View Cart</a> | <a href="{% url 'product_list' %}">Continue Shopping</a>
+<p style="text-align: center; color: #7f8c8d;">
+  <a href="/orders/cart/" style="color: #3498db; text-decoration: none;">View Cart</a> | 
+  <a href="{% url 'product_list' %}" style="color: #3498db; text-decoration: none;">Continue Shopping</a>
 </p>

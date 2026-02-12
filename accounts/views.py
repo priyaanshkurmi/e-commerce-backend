@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from .forms import RegistrationForm
+from django.contrib import messages
 from orders.models import Order
 from .models import Address
 
@@ -69,6 +72,8 @@ def manage_address(request):
     """Create or edit user address"""
     user = request.user
     address = Address.objects.filter(user=user).first()
+    # Support returning to a next URL (e.g. checkout) after saving address
+    next_url = request.GET.get('next') or request.POST.get('next')
     
     if request.method == 'POST':
         if address:
@@ -95,9 +100,41 @@ def manage_address(request):
                 postal_code=request.POST.get('postal_code'),
                 country=request.POST.get('country', 'India')
             )
-        
+        # After saving, redirect back to next if provided (e.g. checkout), otherwise profile
+        if next_url:
+            return redirect(next_url)
         return redirect('profile')
     
     return render(request, 'accounts/manage_address.html', {
-        'address': address
+        'address': address,
+        'next': next_url,
     })
+
+
+def register(request):
+    """Register a new user and auto-login."""
+    # Get the next redirect URL from query parameter
+    next_url = request.GET.get('next', 'dashboard')
+    
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Authenticate and log the user in
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Account created and logged in')
+                return redirect(next_url)
+            messages.warning(request, 'Account created but could not log you in. Please login.')
+            return redirect('login')
+        else:
+            # Debug: log validation errors so server console shows why creation failed
+            print('Registration form invalid:', form.errors.as_json())
+            messages.error(request, 'Registration failed: please check the highlighted fields.')
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'registration/register.html', {'form': form, 'next': next_url})
