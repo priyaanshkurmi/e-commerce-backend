@@ -139,7 +139,10 @@ def verify_payment(request):
             )
 
         # Send confirmation emails
-        send_payment_confirmation_email(payment)
+        try:
+            send_payment_confirmation_email(payment)
+        except Exception as e:
+            logger.error(f"Failed to send payment confirmation email: {e}")
         send_order_confirmation_email(order)
         logger.info(f"Confirmation emails sent for order {order.id}")
 
