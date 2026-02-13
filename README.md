@@ -177,7 +177,107 @@ http://127.0.0.1:8000/
 # 📧 Email Notifications
 *	•	Sends email automatically after payment success
 	•	Includes invoice attachment
-	•	Requires SMTP configuration in .env
+
+
+# Brevo Email Setup & Troubleshooting Guide
+
+## ✓ Quick Setup
+
+### 1. **Copy Environment File**
+```bash
+cp .env.example .env
+```
+
+### 2. **Configure Your Brevo API Key**
+Edit `.env` and add:
+```
+BREVO_API_KEY=your_actual_brevo_api_key_here
+DEFAULT_FROM_EMAIL=your_verified_email@yourdomain.com
+```
+
+⚠️ **Important**: The email in `DEFAULT_FROM_EMAIL` must be verified in your Brevo account!
+
+### 3. **Test Your Configuration**
+```bash
+python manage.py test_brevo --to test@example.com
+```
+
+## 🔍 Common Issues & Solutions
+
+### ❌ "BREVO_API_KEY not configured"
+**Solution:**
+- Check your `.env` file exists in the project root
+- Verify `BREVO_API_KEY` is set correctly
+- Restart Django: `python manage.py runserver`
+- Check logs: `tail -f logs/django.log`
+
+### ❌ "Invalid sender email"
+**Problem**: Sender email is not verified in Brevo account
+
+**Solution:**
+1. Log in to [Brevo Console](https://app.brevo.com)
+2. Go to **Senders** → **Email addresses**
+3. Add and verify your email address
+4. Use that email as `DEFAULT_FROM_EMAIL` in `.env`
+
+### ❌ "API Call Failed: 401 Unauthorized"
+**Problem**: API key is invalid or expired
+
+**Solution:**
+1. Log in to [Brevo Console](https://app.brevo.com)
+2. Go to **Settings** → **SMTP & API**
+3. Generate a new API key
+4. Update `BREVO_API_KEY` in `.env`
+
+### ❌ "API Call Failed: 403 Forbidden"
+**Problem**: You hit your account's email sending limit
+
+**Solution:**
+- Check your Brevo plan and usage
+- Upgrade if necessary or wait for limit reset
+
+### ❌ "No error logs appearing"
+**Problem**: Logging not configured properly
+
+**Solution:**
+- Check `logs/django.log` file exists
+- Make sure `logs/` directory is writable
+- Check permissions: `ls -la logs/`
+
+## 📋 Debugging Checklist
+
+Run this to diagnose issues:
+```bash
+# 1. Check environment variables
+python manage.py shell -c "from django.conf import settings; print(f'API Key: {settings.BREVO_API_KEY}'); print(f'From Email: {settings.DEFAULT_FROM_EMAIL}')"
+
+# 2. Run diagnostic test
+python manage.py test_brevo --to your_email@example.com
+
+# 3. Check logs
+tail -f logs/django.log
+
+# 4. Test with Django shell
+python manage.py shell
+>>> from payments.email import send_order_confirmation_email, get_brevo_client
+>>> get_brevo_client()  # Should return TransactionalEmailsApi instance
+```
+
+## 📊 How Emails Work Now
+
+1. Payment verification happens
+2. Order marked as paid
+3. Email functions called with full error handling
+4. Errors logged to `logs/django.log` with full details
+5. Payment page loads regardless (emails don't block response)
+
+## 🚨 Important Notes
+
+- **Emails are synchronous** - They may slow down payment confirmation page. Consider moving to async tasks (Celery) for production.
+- **Check your spam folder** during testing
+- **Verify sender email** - This is the most common issue!
+- **API rate limits** - Brevo has rate limits depending on your plan
+
 
 ⸻
 

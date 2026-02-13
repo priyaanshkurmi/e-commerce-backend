@@ -138,12 +138,17 @@ def verify_payment(request):
                 paid_at=timezone.now()
             )
 
-        # Send confirmation emails
+        # Send confirmation emails (wrapped in try-except to prevent payment from failing)
         try:
             send_payment_confirmation_email(payment)
         except Exception as e:
             logger.error(f"Failed to send payment confirmation email: {e}")
-        send_order_confirmation_email(order)
+        
+        try:
+            send_order_confirmation_email(order)
+        except Exception as e:
+            logger.error(f"Failed to send order confirmation email: {e}")
+        
         logger.info(f"Confirmation emails sent for order {order.id}")
 
         return redirect("payment_success")
