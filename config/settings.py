@@ -148,6 +148,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@ecommerce.com")
 SERVER_EMAIL = os.getenv("SERVER_EMAIL", "server@ecommerce.com")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 
 EMAIL_TIMEOUT = 10
 EMAIL_SSL_CERTFILE = None
