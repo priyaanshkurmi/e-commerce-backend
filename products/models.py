@@ -1,4 +1,7 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
+
+    
 
 
 class Category(models.Model):
@@ -13,7 +16,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
-    image = models.ImageField(upload_to="products/")
+    image = CloudinaryField('image')
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
