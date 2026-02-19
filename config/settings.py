@@ -184,7 +184,7 @@ STORAGES = {
     },
 }
 
-MEDIA_URL = "/media/"
+MEDIA_URL = ""
 
 # Logging Configuration
 LOGGING = {
