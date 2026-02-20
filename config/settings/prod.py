@@ -23,5 +23,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.ManifestStaticFilesStorage",
     },
 }
+WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = ""
