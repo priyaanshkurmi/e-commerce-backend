@@ -21,8 +21,10 @@ STORAGES = {
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.ManifestStaticFilesStorage",
+        "OPTIONS": {
+            "manifest_strict": False,  # Tell Django 6.0 to ignore missing files
+        },
     },
 }
-WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = ""
