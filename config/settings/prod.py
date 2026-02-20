@@ -13,14 +13,13 @@ DATABASES = {
 
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
-# (Removed the deprecated STATICFILES_STORAGE variable)
+STATICFILES_STORAGE = "whitenoise.storage.ManifestStaticFilesStorage"
 
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        # Changed backend to skip compression and avoid the FileNotFoundError
         "BACKEND": "whitenoise.storage.ManifestStaticFilesStorage",
     },
 }
