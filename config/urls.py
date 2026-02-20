@@ -19,8 +19,6 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include
-from django.views.generic import RedirectView
-from django.contrib.staticfiles.storage import staticfiles_storage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,8 +37,4 @@ urlpatterns += [
     path("accounts/", include("django.contrib.auth.urls")),
     path("orders/", include("orders.urls")),
     path("payments/", include("payments.urls")),
-    path(
-    'favicon.ico',
-    RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')),
-    ),
 ]
